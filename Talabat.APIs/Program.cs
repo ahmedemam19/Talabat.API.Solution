@@ -3,18 +3,30 @@ namespace Talabat.APIs
 {
 	public class Program
 	{
+		// Entry Point
 		public static void Main(string[] args)
 		{
-			var builder = WebApplication.CreateBuilder(args);
+			var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
+			#region Configure Services
+			// Add services to the Dipendancy Injection container.
 
-			builder.Services.AddControllers();
+
+			webApplicationBuilder.Services.AddControllers();
+			// Register Reuqired Web APIs Services to the Dipendancy Injection Container
+
+
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			webApplicationBuilder.Services.AddEndpointsApiExplorer();
+			webApplicationBuilder.Services.AddSwaggerGen(); 
 
-			var app = builder.Build();
+			#endregion
+
+
+			var app = webApplicationBuilder.Build();
+
+
+			#region Configure Kestrel Middlewares
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
@@ -25,10 +37,14 @@ namespace Talabat.APIs
 
 			app.UseHttpsRedirection();
 
-			app.UseAuthorization();
+			//app.UseAuthorization();
 
+			app.MapControllers(); /// It collects all the routes of the controllers
+								  /// It is used instead of [ UseRouting & UseEndPoints ]
+								  /// It Rely on the Attribute [ Route ] in the Controller
 
-			app.MapControllers();
+			#endregion
+
 
 			app.Run();
 		}
