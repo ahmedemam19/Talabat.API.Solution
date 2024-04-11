@@ -47,6 +47,7 @@ namespace Talabat.APIs
 			try
 			{
 				await _dbcontext.Database.MigrateAsync(); // Update Database
+				await StoreContextSeed.SeedAsync(_dbcontext); // Data Seeding
 			}
 			catch (Exception ex)
 			{
