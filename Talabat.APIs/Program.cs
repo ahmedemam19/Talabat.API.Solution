@@ -7,9 +7,10 @@ namespace Talabat.APIs
 	public class Program
 	{
 		// Entry Point
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var webApplicationBuilder = WebApplication.CreateBuilder(args);
+
 
 			#region Configure Services
 			// Add services to the Dipendancy Injection container.
@@ -33,6 +34,25 @@ namespace Talabat.APIs
 
 			var app = webApplicationBuilder.Build();
 
+			using var scope = app.Services.CreateScope();
+
+			var services = scope.ServiceProvider;
+
+			var _dbcontext = services.GetRequiredService<StoreDbContext>();
+			// Ask CLR fro creating Object From DbContext Explicitly
+
+
+			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+			try
+			{
+				await _dbcontext.Database.MigrateAsync(); // Update Database
+			}
+			catch (Exception ex)
+			{
+				var logger = loggerFactory.CreateLogger<Program>();
+				logger.LogError(ex, "An Error Occured during applying Migration");
+			}
 
 			#region Configure Kestrel Middlewares
 
