@@ -1,5 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
+using Talabat.Core.Repositories.Contract;
+using Talabat.Repository;
 using Talabat.Repository.Data;
 
 namespace Talabat.APIs
@@ -27,7 +29,10 @@ namespace Talabat.APIs
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			webApplicationBuilder.Services.AddEndpointsApiExplorer();
-			webApplicationBuilder.Services.AddSwaggerGen(); 
+			webApplicationBuilder.Services.AddSwaggerGen();
+
+			//Allowing Dependancy injection for the Generic Repo for all types 
+			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepoistory<>), typeof(GenericRepository<>));
 
 			#endregion
 
