@@ -15,6 +15,7 @@ namespace Talabat.Core.Specifications
 
         public BaseSpecifications() // to make query that gets all the products
         {
+			// Criteria = Null 
             //Includes = new List<Expression<Func<T, object>>>();
         }
         public BaseSpecifications(Expression<Func<T, bool>> criteriaExpression) // to make query that gets specific product by Id

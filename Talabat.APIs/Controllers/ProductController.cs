@@ -17,6 +17,7 @@ namespace Talabat.APIs.Controllers
 		}
 
 
+
 		// /api/Products
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Product>>> GetProducts()

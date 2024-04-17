@@ -16,6 +16,7 @@ namespace Talabat.Core.Specifications.Product_Specs
             Includes.Add(p =>  p.Category);
         }
 
+		// this ctor is will be used for creating object that will be used to get a specific product with Id
 		public ProductWithBrandAndCategorySpecification(int id) : base(p => p.Id == id)
 		{
 			Includes.Add(p => p.Brand);
