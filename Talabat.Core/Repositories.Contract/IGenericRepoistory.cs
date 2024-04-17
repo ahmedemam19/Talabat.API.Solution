@@ -13,5 +13,9 @@ namespace Talabat.Core.Repositories.Contract
 
 		Task<IEnumerable<T>> GetAllAsync();
 
+		Task<T?> GetWithSpecAsync(ISpecification<T> spec);
+
+		Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> spec);
+
 	}
 }
