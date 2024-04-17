@@ -79,6 +79,8 @@ namespace Talabat.APIs
 
 			//app.UseAuthorization();
 
+			app.UseStaticFiles();
+
 			app.MapControllers(); /// It collects all the routes of the controllers
 								  /// It is used instead of [ UseRouting & UseEndPoints ]
 								  /// It Rely on the Attribute [ Route ] in the Controller
