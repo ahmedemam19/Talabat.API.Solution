@@ -142,14 +142,17 @@ namespace Talabat.APIs
 			#endregion
 
 
-
-
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+
+
+			// It work in case a request sent does not match with any endpoint i the controller
+			app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
 
 			app.UseHttpsRedirection();
 
