@@ -4,6 +4,7 @@ using Talabat.APIs.Errors;
 
 namespace Talabat.APIs.Midllewares
 {
+	// Convension Based
 	public class ExceptionMiddleware
 	{
 		private readonly RequestDelegate _next;

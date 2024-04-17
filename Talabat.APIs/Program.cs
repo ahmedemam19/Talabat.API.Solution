@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Reflection.Metadata;
+using System.Text.Json;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
 using Talabat.APIs.Midllewares;
@@ -68,6 +70,9 @@ namespace Talabat.APIs
 
 			var app = webApplicationBuilder.Build();
 
+
+			#region Apply all Pending Migrations
+
 			using var scope = app.Services.CreateScope();
 
 			var services = scope.ServiceProvider;
@@ -75,8 +80,9 @@ namespace Talabat.APIs
 			var _dbcontext = services.GetRequiredService<StoreDbContext>();
 			// Ask CLR fro creating Object From DbContext Explicitly
 
-
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+			var logger = loggerFactory.CreateLogger<Program>();
 
 			try
 			{
@@ -85,13 +91,58 @@ namespace Talabat.APIs
 			}
 			catch (Exception ex)
 			{
-				var logger = loggerFactory.CreateLogger<Program>();
 				logger.LogError(ex, "An Error Occured during applying Migration");
 			}
 
+			#endregion
+
+
 			#region Configure Kestrel Middlewares
 
+
 			app.UseMiddleware<ExceptionMiddleware>();
+
+			#region Implementing the middleware in the [ program file ] instead of making a class
+
+			//app.Use(async (httpContext, _next) =>
+			//{
+			//	try
+			//	{
+
+			//		// take an action with the request
+
+			//		await _next.Invoke(httpContext); // Go to next middleware
+
+			//		// take an action with the respone
+
+			//	}
+			//	catch (Exception ex)
+			//	{
+			//		logger.LogError(ex.Message); // Development Env
+			//									  // log Exception in ( Database | Files ) // Production Env
+
+
+			//		httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+			//		httpContext.Response.ContentType = "application/json";
+
+
+			//		var response = webApplicationBuilder.Environment.IsDevelopment() ?
+			//			new ApiExceptionResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
+			//			:
+			//			new ApiExceptionResponse((int)HttpStatusCode.InternalServerError);
+
+			//		var options = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+			//		var json = JsonSerializer.Serialize(response, options);
+
+			//		await httpContext.Response.WriteAsync(json);
+			//	}
+			//}); 
+
+			#endregion
+
+
+
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
