@@ -10,7 +10,7 @@ using Talabat.Core.Entities;
 
 namespace Talabat.Repository
 {
-	internal static class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
+	public static class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
 	{
 		public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
 		{
