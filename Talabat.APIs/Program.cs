@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Talabat.APIs.Helpers;
 using Talabat.Core.Repositories.Contract;
 using Talabat.Repository;
 using Talabat.Repository.Data;
@@ -33,6 +34,11 @@ namespace Talabat.APIs
 
 			//Allowing Dependancy injection for the Generic Repo for all types 
 			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepoistory<>), typeof(GenericRepository<>));
+
+
+			//webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
+			webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
+
 
 			#endregion
 
