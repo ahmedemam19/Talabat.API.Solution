@@ -30,6 +30,7 @@ namespace Talabat.APIs.Controllers
 		public ActionResult GetServerError()
 		{
 			var product = _dbContext.Products.Find(100);
+
 			var productToReturn = product.ToString(); // will throw exception [NullReferenceException]
 
 
