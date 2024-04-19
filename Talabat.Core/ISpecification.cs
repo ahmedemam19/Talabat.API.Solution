@@ -11,7 +11,10 @@ namespace Talabat.Core
 	public interface ISpecification<T> where T : BaseEntity
 	{
         public Expression<Func<T, bool>> Criteria { get; set; } // p => p.Id == 10
-
         public List<Expression<Func<T, object>>> Includes { get; set; }
+
+
+        public Expression<Func<T, object>> OrderBy { get; set; }
+        public Expression<Func<T, object>> OrderByDesc { get; set; }
     }
 }

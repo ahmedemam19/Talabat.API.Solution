@@ -19,6 +19,12 @@ namespace Talabat.Repository
 			if(spec.Criteria is not null) // p => p.Id == 1
 				query = query.Where(spec.Criteria);
 
+
+			if (spec.OrderBy is not null) // to sort by price
+				query = query.OrderBy(spec.OrderBy);
+			else if (spec.OrderByDesc is not null) // to sort by price Desc
+				query = query.OrderByDescending(spec.OrderByDesc);
+
 			// query = _dbContext.Set<Product>().Where(p => p.Id == 1)
 			// Includes
 			// 1. p => p.Brand
