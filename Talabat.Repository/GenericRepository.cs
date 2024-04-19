@@ -21,7 +21,7 @@ namespace Talabat.Repository
 		}
 
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IReadOnlyList<T>> GetAllAsync()
 		{ 
             return await _dbContext.Set<T>().ToListAsync();
 		}
@@ -33,7 +33,7 @@ namespace Talabat.Repository
 
 
 
-		public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> spec)
+		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> spec)
 		{
 			return await ApplySpecification(spec).ToListAsync();
 		}
