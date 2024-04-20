@@ -10,25 +10,27 @@ namespace Talabat.Core.Specifications.Product_Specs
 	public class ProductWithBrandAndCategorySpecification : BaseSpecifications<Product>
 	{
         // this ctor is will be used for creating object that will be used to get all products
-        public ProductWithBrandAndCategorySpecification(string? sort, int? brandId, int? categoryId) 
-			: base(p => (!brandId.HasValue || p.BrandId == brandId.Value)
+        public ProductWithBrandAndCategorySpecification(ProductSpecParams specParams) 
+			: base(p => (!specParams.BrandId.HasValue || p.BrandId == specParams.BrandId.Value)
 						&&
-						(!categoryId.HasValue || p.CategoryId == categoryId.Value))
+						(!specParams.CategoryId.HasValue || p.CategoryId == specParams.CategoryId.Value))
 
 		{
             Includes.Add(p =>  p.Brand);
             Includes.Add(p =>  p.Category);
 
 
-			if (!string.IsNullOrEmpty(sort))
+			if (!string.IsNullOrEmpty(specParams.Sort))
 			{
-				switch (sort)
+				switch (specParams.Sort)
 				{
 					case "priceAsc":
-						OrderBy = p => p.Price;
+						//OrderBy = p => p.Price;
+						AddOrderBy(p => p.Price);
 						break;
 					case "priceDesc":
-						OrderByDesc = p => p.Price;
+						//OrderByDesc = p => p.Price;
+						AddOrderByDesc(p => p.Price);
 						break;
 					default:
 						OrderBy = p => p.Name;
@@ -38,6 +40,8 @@ namespace Talabat.Core.Specifications.Product_Specs
 			else
 				AddOrderBy(p => p.Name);
 
+
+			ApplyPagination((specParams.PageIndex -1) * specParams.PageSize, specParams.PageSize);
         }
 
 		// this ctor is will be used for creating object that will be used to get a specific product with Id
