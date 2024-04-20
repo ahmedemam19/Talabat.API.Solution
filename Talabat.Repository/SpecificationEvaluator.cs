@@ -25,7 +25,7 @@ namespace Talabat.Repository
 			if (spec.OrderBy is not null) // to sort by price
 				query = query.OrderBy(spec.OrderBy);
 
-			// query = _dbContext.Set<Product>().Where(p => p.BrandId == 1 && true).OrderBy(p => p.Name)
+			// query = _dbContext.Set<Product>().Where(p => p.BrandId == 1 && true)
 
 			else if (spec.OrderByDesc is not null) // to sort by price Desc
 				query = query.OrderByDescending(spec.OrderByDesc);
@@ -35,17 +35,14 @@ namespace Talabat.Repository
 				query = query.Skip(spec.Skip).Take(spec.Take);
 
 
-			// query = _dbContext.Set<Product>().Where(p => p.BrandId == 1 && p.CategoryId == 1).OrderBy(p => p.Price)
+			// query = _dbContext.Set<Product>().Where(p => p.BrandId == 2 && true)
 			// Includes
-			// 1. p => p.Brand
-			// 2. p => p.Category
+
 
 
 			query = spec.Includes.Aggregate(query, (currentQuery, IncludeExpression) => currentQuery.Include(IncludeExpression));
 
-			// _dbContext.Product.Where(p => true && true).OrderBy(p => p.Name).Skip(5).Take(5).Include(p => p.Brand)
-			// _dbContext.Product.Where(p => true && true).OrderBy(p => p.Name).Skip(5).Take(5).Include(p => p.Brand).Include(p => p.Category)
-
+			// query = _dbContext.Set<Product>().Where(p => p.BrandId == 2 && true)
 
 			return query;
 		}
