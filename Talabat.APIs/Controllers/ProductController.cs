@@ -39,6 +39,7 @@ namespace Talabat.APIs.Controllers
 		public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams specParams)
 		{
 			// We Implemented (Sorting, Filteration and Pagination)
+
 			var spec = new ProductWithBrandAndCategorySpecification(specParams);
 
 			var products = await _productsRepo.GetAllWithSpecAsync(spec);
