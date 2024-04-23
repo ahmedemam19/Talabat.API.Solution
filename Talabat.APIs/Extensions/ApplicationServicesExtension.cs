@@ -11,6 +11,9 @@ namespace Talabat.APIs.Extensions
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
+			//Allowing Dependancy injection for the Basket Repo
+			services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
+
 
 			//Allowing Dependancy injection for the Generic Repo for all types 
 			services.AddScoped(typeof(IGenericRepoistory<>), typeof(GenericRepository<>));
