@@ -11,7 +11,7 @@ using Talabat.Core.Specifications.Product_Specs;
 
 namespace Talabat.APIs.Controllers
 {
-	public class ProductController : BaseApiController
+	public class ProductsController : BaseApiController
 	{
 		private readonly IGenericRepoistory<Product> _productsRepo;
 		private readonly IGenericRepoistory<ProductBrand> _productBrandRepo;
@@ -20,7 +20,7 @@ namespace Talabat.APIs.Controllers
 
 
 		//Constructotr
-		public ProductController(
+		public ProductsController(
 			IGenericRepoistory<Product> productsRepo,
 			IGenericRepoistory<ProductBrand> productBrandRepo,
 			IGenericRepoistory<ProductCategory> productCategoryRepo,
