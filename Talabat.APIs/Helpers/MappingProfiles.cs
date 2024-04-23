@@ -15,7 +15,11 @@ namespace Talabat.APIs.Helpers
                 .ForMember(distnation => distnation.Category, options => options.MapFrom(source => source.Category.Name))
                 //.ForMember(distnation => distnation.PictureUrl, options => options.MapFrom(source => $"{"https://localhost:7264"}/{source.PictureUrl}"));
                 .ForMember(distnation => distnation.PictureUrl, options => options.MapFrom<ProductPictureUrlResolver>());
-                
+
+
+            CreateMap<CustomerBasketDto, CustomerBasket>();
+            CreateMap<BasketItemDto, BasketItem>();
+
 		}
     }
 }
