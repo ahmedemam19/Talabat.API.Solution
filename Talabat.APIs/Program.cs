@@ -13,6 +13,7 @@ using Talabat.APIs.Midllewares;
 using Talabat.Core.Repositories.Contract;
 using Talabat.Repository;
 using Talabat.Repository.Data;
+using Talabat.Repository._Identity;
 
 namespace Talabat.APIs
 {
@@ -30,12 +31,25 @@ namespace Talabat.APIs
 			webApplicationBuilder.Services.AddControllers();
 			// Register Reuqired Web APIs Services to the Dipendancy Injection Container
 
+
 			webApplicationBuilder.Services.AddSwaggerServices();
+
+
+			//ApplicationServicesExtension.AddApplicationServices(webApplicationBuilder.Services);
+			webApplicationBuilder.Services.AddApplicationServices();
+
 
 			webApplicationBuilder.Services.AddDbContext<StoreDbContext>(options  =>
 			{
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			});
+
+
+			webApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
+			{
+				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
+			});
+			
 
 			webApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
 			{
@@ -43,8 +57,6 @@ namespace Talabat.APIs
 				return ConnectionMultiplexer.Connect(connection);
 			});
 
-			//ApplicationServicesExtension.AddApplicationServices(webApplicationBuilder.Services);
-			webApplicationBuilder.Services.AddApplicationServices();
 
 			#endregion
 
@@ -59,7 +71,10 @@ namespace Talabat.APIs
 			var services = scope.ServiceProvider;
 
 			var _dbcontext = services.GetRequiredService<StoreDbContext>();
-			// Ask CLR fro creating Object From DbContext Explicitly
+			// Ask CLR fro creating Object From DbContext Explicitly for StoreDbContext
+
+			var _identityDbcontext = services.GetRequiredService<ApplicationIdentityDbContext>();
+			// Ask CLR fro creating Object From DbContext Explicitly for ApplicationIdentityDbContext
 
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
@@ -67,8 +82,11 @@ namespace Talabat.APIs
 
 			try
 			{
-				await _dbcontext.Database.MigrateAsync(); // Update Database
+				await _dbcontext.Database.MigrateAsync(); // Update Database for StoreDbContext
 				await StoreContextSeed.SeedAsync(_dbcontext); // Data Seeding
+
+				await _identityDbcontext.Database.MigrateAsync(); // Update Database for ApplicationIdentityDbContext
+
 			}
 			catch (Exception ex)
 			{
