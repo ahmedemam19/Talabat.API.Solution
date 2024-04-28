@@ -14,6 +14,8 @@ using Talabat.Core.Repositories.Contract;
 using Talabat.Repository;
 using Talabat.Repository.Data;
 using Talabat.Repository._Identity;
+using Talabat.Core.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Talabat.APIs
 {
@@ -58,6 +60,13 @@ namespace Talabat.APIs
 			});
 
 
+			// Adding Default identity system config for specified User and Role
+			webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+			{
+				//options.Password.RequiredUniqueChars = 2;
+			})
+				.AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
 			#endregion
 
 
@@ -83,10 +92,13 @@ namespace Talabat.APIs
 			try
 			{
 				await _dbcontext.Database.MigrateAsync(); // Update Database for StoreDbContext
-				await StoreContextSeed.SeedAsync(_dbcontext); // Data Seeding
+				await StoreContextSeed.SeedAsync(_dbcontext); // Data Seeding for StoreDbContext
+
 
 				await _identityDbcontext.Database.MigrateAsync(); // Update Database for ApplicationIdentityDbContext
 
+				var _usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
+				await ApplicationIdentityContextSeed.SeedUserAsync(_usermanager); // Data Seeding for ApplicationIdentityDbContext
 			}
 			catch (Exception ex)
 			{
@@ -156,6 +168,7 @@ namespace Talabat.APIs
 								  /// It is used instead of [ UseRouting & UseEndPoints ]
 								  /// It Rely on the Attribute [ Route ] in the Controller
 			#endregion
+
 
 			app.Run();
 		}
