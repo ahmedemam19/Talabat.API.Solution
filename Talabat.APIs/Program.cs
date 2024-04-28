@@ -64,8 +64,7 @@ namespace Talabat.APIs
 			webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
 				//options.Password.RequiredUniqueChars = 2;
-			})
-				.AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+			}).AddEntityFrameworkStores<ApplicationIdentityDbContext>();
 
 			#endregion
 
