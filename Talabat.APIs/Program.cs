@@ -18,6 +18,9 @@ using Talabat.Core.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Talabat.Core.Services.Contract;
 using Talabat.Service.AuthService;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Talabat.APIs
 {
@@ -69,6 +72,9 @@ namespace Talabat.APIs
 			{
 				//options.Password.RequiredUniqueChars = 2;
 			}).AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
+
+			webApplicationBuilder.Services.AddAuthServices(webApplicationBuilder.Configuration); // for JWT
 
 			#endregion
 
