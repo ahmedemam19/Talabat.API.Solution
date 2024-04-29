@@ -16,6 +16,8 @@ using Talabat.Repository.Data;
 using Talabat.Repository._Identity;
 using Talabat.Core.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
+using Talabat.Core.Services.Contract;
+using Talabat.Service.AuthService;
 
 namespace Talabat.APIs
 {
@@ -59,6 +61,8 @@ namespace Talabat.APIs
 				return ConnectionMultiplexer.Connect(connection);
 			});
 
+
+			webApplicationBuilder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
 
 			// Adding Default identity system config for specified User and Role
 			webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

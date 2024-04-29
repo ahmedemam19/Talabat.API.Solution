@@ -13,7 +13,7 @@ using Talabat.Core.Services.Contract;
 
 namespace Talabat.Service.AuthService
 {
-	class AuthService : IAuthService
+	public class AuthService : IAuthService
 	{
 		private readonly IConfiguration _configuration;
 
