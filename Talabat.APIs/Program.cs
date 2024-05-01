@@ -21,6 +21,7 @@ using Talabat.Service.AuthService;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
 
 namespace Talabat.APIs
 {
@@ -35,15 +36,19 @@ namespace Talabat.APIs
 			#region Configure Services
 			// Add services to the Dipendancy Injection container.
 
-			webApplicationBuilder.Services.AddControllers();
+
 			// Register Reuqired Web APIs Services to the Dipendancy Injection Container
+			// AddNewtonsoftJson is used in all projects
+			webApplicationBuilder.Services.AddControllers().AddNewtonsoftJson(options =>
+			{
+				options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+			}); 
 
 
 			webApplicationBuilder.Services.AddSwaggerServices();
 
-
-			//ApplicationServicesExtension.AddApplicationServices(webApplicationBuilder.Services);
-			webApplicationBuilder.Services.AddApplicationServices();
+			
+			webApplicationBuilder.Services.AddApplicationServices(); //ApplicationServicesExtension.AddApplicationServices(webApplicationBuilder.Services);
 
 
 			webApplicationBuilder.Services.AddDbContext<StoreDbContext>(options  =>
@@ -66,6 +71,7 @@ namespace Talabat.APIs
 
 
 			webApplicationBuilder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
+
 
 			// Adding Default identity system config for specified User and Role
 			webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
