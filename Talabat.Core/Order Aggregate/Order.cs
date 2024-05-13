@@ -19,7 +19,7 @@ namespace Talabat.Core.Order_Aggregate
 		public Address ShippingAddress { get; set; } = null!;
 
         //public int DeliveryMethodId { get; set; } // ForeginKey
-        public DeliveryMethod DeliveryMethod { get; set; } = null!; // Navigational Property [ ONE ]
+        public DeliveryMethod? DeliveryMethod { get; set; } = null!; // Navigational Property [ ONE ]
 
         public ICollection<OrderItem> Items { get; set; } = new HashSet<OrderItem>(); // Navigational Property [ MANY ]
 
