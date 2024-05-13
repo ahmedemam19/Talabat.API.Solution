@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
+using Talabat.Core;
 using Talabat.Core.Repositories.Contract;
 using Talabat.Repository;
 
@@ -14,12 +15,16 @@ namespace Talabat.APIs.Extensions
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
+			//Allowing Dependancy injection for the UnitOfWork
+			services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+
+
 			//Allowing Dependancy injection for the Basket Repo
 			services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 
 
 			//Allowing Dependancy injection for the Generic Repo for all types 
-			services.AddScoped(typeof(IGenericRepoistory<>), typeof(GenericRepository<>));
+			//services.AddScoped(typeof(IGenericRepoistory<>), typeof(GenericRepository<>));
 
 
 			//services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
