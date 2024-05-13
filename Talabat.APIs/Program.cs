@@ -13,6 +13,15 @@ using Talabat.APIs.Midllewares;
 using Talabat.Core.Repositories.Contract;
 using Talabat.Repository;
 using Talabat.Repository.Data;
+using Talabat.Repository._Identity;
+using Talabat.Core.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using Talabat.Core.Services.Contract;
+using Talabat.Service.AuthService;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
 
 namespace Talabat.APIs
 {
@@ -27,15 +36,32 @@ namespace Talabat.APIs
 			#region Configure Services
 			// Add services to the Dipendancy Injection container.
 
-			webApplicationBuilder.Services.AddControllers();
+
 			// Register Reuqired Web APIs Services to the Dipendancy Injection Container
+			// AddNewtonsoftJson is used in all projects
+			webApplicationBuilder.Services.AddControllers().AddNewtonsoftJson(options =>
+			{
+				options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+			}); 
+
 
 			webApplicationBuilder.Services.AddSwaggerServices();
+
+			
+			webApplicationBuilder.Services.AddApplicationServices(); //ApplicationServicesExtension.AddApplicationServices(webApplicationBuilder.Services);
+
 
 			webApplicationBuilder.Services.AddDbContext<StoreDbContext>(options  =>
 			{
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			});
+
+
+			webApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
+			{
+				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
+			});
+			
 
 			webApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
 			{
@@ -43,8 +69,18 @@ namespace Talabat.APIs
 				return ConnectionMultiplexer.Connect(connection);
 			});
 
-			//ApplicationServicesExtension.AddApplicationServices(webApplicationBuilder.Services);
-			webApplicationBuilder.Services.AddApplicationServices();
+
+			webApplicationBuilder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
+
+
+			// Adding Default identity system config for specified User and Role
+			webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+			{
+				//options.Password.RequiredUniqueChars = 2;
+			}).AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
+
+			webApplicationBuilder.Services.AddAuthServices(webApplicationBuilder.Configuration); // for JWT
 
 			#endregion
 
@@ -59,7 +95,10 @@ namespace Talabat.APIs
 			var services = scope.ServiceProvider;
 
 			var _dbcontext = services.GetRequiredService<StoreDbContext>();
-			// Ask CLR fro creating Object From DbContext Explicitly
+			// Ask CLR fro creating Object From DbContext Explicitly for StoreDbContext
+
+			var _identityDbcontext = services.GetRequiredService<ApplicationIdentityDbContext>();
+			// Ask CLR fro creating Object From DbContext Explicitly for ApplicationIdentityDbContext
 
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
@@ -67,8 +106,14 @@ namespace Talabat.APIs
 
 			try
 			{
-				await _dbcontext.Database.MigrateAsync(); // Update Database
-				await StoreContextSeed.SeedAsync(_dbcontext); // Data Seeding
+				await _dbcontext.Database.MigrateAsync(); // Update Database for StoreDbContext
+				await StoreContextSeed.SeedAsync(_dbcontext); // Data Seeding for StoreDbContext
+
+
+				await _identityDbcontext.Database.MigrateAsync(); // Update Database for ApplicationIdentityDbContext
+
+				var _usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
+				await ApplicationIdentityContextSeed.SeedUserAsync(_usermanager); // Data Seeding for ApplicationIdentityDbContext
 			}
 			catch (Exception ex)
 			{
@@ -138,6 +183,7 @@ namespace Talabat.APIs
 								  /// It is used instead of [ UseRouting & UseEndPoints ]
 								  /// It Rely on the Attribute [ Route ] in the Controller
 			#endregion
+
 
 			app.Run();
 		}
