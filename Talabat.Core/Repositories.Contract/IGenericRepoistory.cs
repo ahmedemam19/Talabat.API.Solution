@@ -17,7 +17,7 @@ namespace Talabat.Core.Repositories.Contract
 
 		Task<int> GetCountAsync(ISpecification<T> spec);
 
-		void Add(T entity);
+		void AddAsync(T entity);
 
 		void Update(T entity);
 
