@@ -10,6 +10,21 @@ namespace Talabat.Core.Order_Aggregate
 {
 	public class Order : BaseEntity
 	{
+		// A parameterless Constructor must be existed for EF core
+        private Order()
+        {
+            
+        }
+
+		public Order(string buyerEmail, Address shippingAddress, int? deliveryMethodId, ICollection<OrderItem> items, decimal subtotal)
+		{
+			BuyerEmail = buyerEmail;
+			ShippingAddress = shippingAddress;
+			DeliveryMethodId = deliveryMethodId;
+			Items = items;
+			Subtotal = subtotal;
+		}
+
 		public string BuyerEmail { get; set; } = null!;
 		
 		public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.UtcNow;
@@ -18,8 +33,8 @@ namespace Talabat.Core.Order_Aggregate
         
 		public Address ShippingAddress { get; set; } = null!;
 
-        //public int DeliveryMethodId { get; set; } // ForeginKey
-        public DeliveryMethod? DeliveryMethod { get; set; } = null!; // Navigational Property [ ONE ]
+		public int? DeliveryMethodId { get; set; } // ForeginKey
+		public DeliveryMethod? DeliveryMethod { get; set; } = null!; // Navigational Property [ ONE ]
 
         public ICollection<OrderItem> Items { get; set; } = new HashSet<OrderItem>(); // Navigational Property [ MANY ]
 
