@@ -8,7 +8,20 @@ namespace Talabat.Core.Order_Aggregate
 {
 	public class Address
 	{
-        public required string FirstName { get; set; }
+        public Address()
+        {
+            
+        }
+		public Address(string firstName, string lastName, string street, string city, string country)
+		{
+			FirstName = firstName;
+			LastName = lastName;
+			Street = street;
+			City = city;
+			Country = country;
+		}
+
+		public required string FirstName { get; set; }
         public string  LastName { get; set; } = null!;
 		public string  Street { get; set; } = null!;
 		public string City { get; set; } = null!;

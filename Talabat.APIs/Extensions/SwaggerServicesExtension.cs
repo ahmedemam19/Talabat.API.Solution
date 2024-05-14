@@ -7,7 +7,10 @@
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			services.AddEndpointsApiExplorer();
-			services.AddSwaggerGen();
+			services.AddSwaggerGen(options =>
+			{
+				options.CustomSchemaIds(type => type.ToString());
+			});
 
 			return services;
 		}

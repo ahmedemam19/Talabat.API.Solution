@@ -7,7 +7,9 @@ using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
 using Talabat.Core;
 using Talabat.Core.Repositories.Contract;
+using Talabat.Core.Services.Contract;
 using Talabat.Repository;
+using Talabat.Service.OrderService;
 
 namespace Talabat.APIs.Extensions
 {
@@ -15,6 +17,10 @@ namespace Talabat.APIs.Extensions
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
+
+
+			services.AddScoped(typeof(IOrderService), typeof(OrderService));
+
 			//Allowing Dependancy injection for the UnitOfWork
 			services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 

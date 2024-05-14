@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Talabat.APIs.Dtos;
 using Talabat.Core.Entities;
-using Talabat.Core.Entities.Identity;
+using Talabat.Core.Order_Aggregate;
+
+//using Talabat.Core.Entities.Identity;
 using static System.Net.WebRequestMethods;
 
 namespace Talabat.APIs.Helpers
@@ -22,8 +24,9 @@ namespace Talabat.APIs.Helpers
 
             CreateMap<BasketItemDto, BasketItem>();
 
-            CreateMap<Address, AddressDto>().ReverseMap();
+            //CreateMap<Address, AddressDto>().ReverseMap();
 
+            CreateMap<AddressDto, Address>();
 		}
     }
 }
