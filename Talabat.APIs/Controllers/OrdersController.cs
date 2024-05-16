@@ -35,5 +35,16 @@ namespace Talabat.APIs.Controllers
 
 			return Ok(order);
 		}
+
+
+
+		[HttpGet] // GET: /api/Orders?email=bondokahmed@gmail.com
+		public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser(string email)
+		{
+			var orders = await _orderService.GetOrdersForUserAsync(email);
+
+			return Ok(orders);
+		}
+
     }
 }

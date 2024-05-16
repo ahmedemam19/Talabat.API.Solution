@@ -8,6 +8,7 @@ using Talabat.Core.Entities;
 using Talabat.Core.Order_Aggregate;
 using Talabat.Core.Repositories.Contract;
 using Talabat.Core.Services.Contract;
+using Talabat.Core.Specifications.Order_Specs;
 
 namespace Talabat.Service.OrderService
 {
@@ -23,9 +24,9 @@ namespace Talabat.Service.OrderService
 		public OrderService(
 			IBasketRepository basketRepo, 
 			IUnitOfWork unitOfWork
-			//IGenericRepoistory<Product> productRepo, 
-			//IGenericRepoistory<DeliveryMethod> deliveryMethodRepo,
-			//IGenericRepoistory<Order> orderRepo
+			///IGenericRepoistory<Product> productRepo, 
+			///IGenericRepoistory<DeliveryMethod> deliveryMethodRepo,
+			///IGenericRepoistory<Order> orderRepo
 			)
         {
 			_basketRepo = basketRepo;
@@ -104,9 +105,15 @@ namespace Talabat.Service.OrderService
 			throw new NotImplementedException();
 		}
 
-		public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
+		public async Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
 		{
-			throw new NotImplementedException();
+			var ordersRepo =  _unitOfWork.Repository<Order>();
+
+			var spec = new OrderSpecifications(buyerEmail);
+
+			var orders = await ordersRepo.GetAllWithSpecAsync(spec);
+
+			return orders;
 		}
 	}
 }
