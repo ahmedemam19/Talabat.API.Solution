@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.APIs.Dtos;
@@ -38,6 +39,7 @@ namespace Talabat.APIs.Controllers
 
 
 
+		[Authorize]
 		[HttpGet] // GET: /api/Orders?email=bondokahmed@gmail.com
 		public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser(string email)
 		{
@@ -46,5 +48,21 @@ namespace Talabat.APIs.Controllers
 			return Ok(orders);
 		}
 
-    }
+
+		[Authorize]
+		[ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+		[HttpGet("{id}")] // GET: /api/Orders/1?email=bondokahmed@gmail.com
+		public async Task<ActionResult<IReadOnlyList<Order>>> GetOrderForUser(int id, string email)
+		{
+			var order = await _orderService.GetOrderByIdForUserAsync(id, email);
+
+			if(order is null) return NotFound(new ApiResponse(404));
+
+			return Ok(order);
+		}
+
+
+
+	}
 }

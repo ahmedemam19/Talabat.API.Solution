@@ -26,7 +26,7 @@ namespace Talabat.Repository
             return await _dbContext.Set<T>().ToListAsync();
 		}
 
-		public async Task<T?> GetAsync(int id)
+		public async Task<T?> GetByIdAsync(int id)
 		{
 			return await _dbContext.Set<T>().FindAsync(id);
 		}
@@ -37,7 +37,7 @@ namespace Talabat.Repository
 			return await ApplySpecification(spec).ToListAsync();
 		}
 
-		public async Task<T?> GetWithSpecAsync(ISpecification<T> spec)
+		public async Task<T?> GetByIdWithSpecAsync(ISpecification<T> spec)
 		{
 			return await ApplySpecification(spec).FirstOrDefaultAsync();
 		}
