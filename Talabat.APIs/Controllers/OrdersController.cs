@@ -23,6 +23,8 @@ namespace Talabat.APIs.Controllers
 			_mapper = mapper;
 		}
 
+
+		[Authorize]
 		[ProducesResponseType(typeof(OrderToReturnDto), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
 		[HttpPost] // POST: /api/Orders
@@ -49,6 +51,7 @@ namespace Talabat.APIs.Controllers
 		}
 
 
+
 		[Authorize]
 		[ProducesResponseType(typeof(OrderToReturnDto), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -62,6 +65,15 @@ namespace Talabat.APIs.Controllers
 			return Ok(_mapper.Map<OrderToReturnDto>(order));
 		}
 
+
+
+		[Authorize]
+		[HttpGet("deliveryMethods")] // GET: /api/Orders/deliveryMethods
+		public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
+		{
+			var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
+			return Ok(deliveryMethods);
+		}
 
 
 	}
