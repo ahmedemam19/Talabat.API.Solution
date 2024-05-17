@@ -31,7 +31,7 @@ namespace Talabat.APIs.Controllers
 		public async Task<ActionResult<IEnumerable<Employee>>> GetById(int id)
 		{
 			var spec = new EmployeeWithDepartmentSpecification(id);
-			var employee = await _employeeRepo.GetWithSpecAsync(spec);
+			var employee = await _employeeRepo.GetByIdWithSpecAsync(spec);
 
 			if (employee == null) { return NotFound(new ApiResponse(404)); }
 
